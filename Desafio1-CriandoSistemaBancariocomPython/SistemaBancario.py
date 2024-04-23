@@ -40,29 +40,40 @@ while True:
         print("*******************************************")
         saque=float(input("Entre com valor a ser sacado: "))
         
+        excedeu_saldo = saque > saldo
+
+        excedeu_limite = saque > limite
+
+        excedeu_saques = numero_saques >= LIMITE_SAQUES
+
         while saque<0:
             print("Não é permitido valor negativo")
             saque=float(input("Entre com valor a ser sacado: "))
         else:
-            if numero_saques <= LIMITE_SAQUES or saque <= limite:
-                if saque<=saldo:
-                    saldo-=saque
-                    numero_saques+=1
-                    extrato+= """
-        Saque ---------------R${:.2f} """.format(saque)
-                else:
-                    print("Não será possível sacar o dinheiro por falta de saldo")
-            else:
-                print("Limite diário estourado")
+            if excedeu_saldo:
+                print("Operação falhou! Você não tem saldo suficiente.")
+            
+            elif excedeu_limite:
+                print("Operação falhou! O valor do saque excede o limite.")
 
-        
+            elif excedeu_saques:
+                print("Operação falhou! Número máximo de saques excedido.")
+
+            elif saque > 0:
+                saldo-=saque
+                numero_saques+=1
+                extrato+= """
+        Saque ---------------R${:.2f} """.format(saque)
+            
+            else:
+                print("Operação falhou! O valor informado é inválido")
+
         print("*******************************************")
-        saque=0
+       
 
     elif opcao == "e":
         print("Extrato")
         print("*******************************************")
-    
         print(extrato)
         print("""
         SALDO ----------------R${:.2f} """.format(saldo))
